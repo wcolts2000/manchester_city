@@ -8,7 +8,7 @@ function Footer() {
         <CityLogo width="70px" height="70px" link={true} linkTo="/" />
       </div>
       <div className="footer_disclaimer">
-        Manchester city 2019. All rights reserved
+        Manchester City &copy; 2019. All rights reserved
       </div>
     </footer>
   );
