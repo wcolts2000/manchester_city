@@ -1,5 +1,5 @@
 import React from "react";
-
+ 
 function MatchedBlock({ match }) {
   return (
     <div className="match_block">
@@ -12,7 +12,7 @@ function MatchedBlock({ match }) {
             <div
               className="icon"
               style={{
-                background: `url(/images/team_icons/${match.localThmb}.png)`
+                background: `url(images/team_icons/${match.localThmb}.png)`
               }}
             />
             <div className="team_name">{match.local}</div>
@@ -24,7 +24,9 @@ function MatchedBlock({ match }) {
             <div
               className="icon"
               style={{
-                background: `url(/images/team_icons/${match.awayThmb}.png)`
+                background: `url(/images/team_icons/${
+                  match.awayThmb
+                }.png) no-repeat`
               }}
             />
             <div className="team_name">{match.away}</div>
