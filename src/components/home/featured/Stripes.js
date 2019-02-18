@@ -45,6 +45,9 @@ export default class Stripes extends Component {
           enter={{
             background: [stripe.background],
             timing: { delay: stripe.delay, duration: 200, ease: easePolyOut },
+            events: {
+              end() {}
+            },
             opacity: [1],
             left: [stripe.left],
             rotate: [stripe.rotate],
