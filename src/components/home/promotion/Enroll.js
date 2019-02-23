@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import Fade from "react-reveal/Fade";
+import { firebasePromotions } from "../../../firebase";
 import FormField from "../../ui/formFeilds";
 import { validate } from "../../ui/misc";
 
@@ -44,7 +45,7 @@ export default class Enroll extends Component {
     });
   };
 
-  resetFormSuccess() {
+  resetFormSuccess(type) {
     const newFormData = { ...this.state.formdata };
     for (let key in newFormData) {
       newFormData[key].value = "";
@@ -54,7 +55,7 @@ export default class Enroll extends Component {
     this.setState({
       formError: false,
       formdata: newFormData,
-      formSuccess: "Congratulations"
+      formSuccess: type ? "Congratulations" : "Already in the database"
     });
     this.clearSuccessMessage();
   }
@@ -76,8 +77,19 @@ export default class Enroll extends Component {
       formIsValid = this.state.formdata[key].valid && formIsValid;
     }
     if (formIsValid) {
-      console.log(dataToSubmit);
-      this.resetFormSuccess();
+      firebasePromotions
+        .orderByChild("email")
+        .equalTo(dataToSubmit.email)
+        .once("value")
+        .then(snapshot => {
+          if (snapshot.val() === null) {
+            firebasePromotions.push(dataToSubmit);
+            this.resetFormSuccess(true);
+          } else {
+            this.resetFormSuccess(false);
+          }
+        });
+      //this.resetFormSuccess();
     } else {
       this.setState({
         formError: true
@@ -104,6 +116,7 @@ export default class Enroll extends Component {
               ) : null}
               <div className="success_label">{this.state.formSuccess}</div>
               <button onClick={e => this.submitForm(e)}>Enroll</button>
+              <div className="enroll_discl">Lorem ipsum dolor sit amet consectetur adipisicing elit. Obcaecati veritatis distinctio odio quas autem! Quis placeat ratione repudiandae iste ut, optio non. Omnis quaerat quas asperiores voluptatum, rem ea maxime?</div>
             </div>
           </form>
         </div>
