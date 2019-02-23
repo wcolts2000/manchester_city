@@ -39,8 +39,26 @@ export default class Enroll extends Component {
     newFormData[element.id] = newElement;
 
     this.setState({
+      formError: false,
       formdata: newFormData
     });
+  };
+
+  submitForm = e => {
+    e.preventDefault();
+    let dataToSubmit = {};
+    let formIsValid = true;
+    for (let key in this.state.formdata) {
+      dataToSubmit[key] = this.state.formdata[key].value;
+      formIsValid = this.state.formdata[key].valid && formIsValid;
+    }
+    if (formIsValid) {
+      console.log(dataToSubmit);
+    } else {
+      this.setState({
+        formError: true
+      });
+    }
   };
 
   render() {
@@ -55,6 +73,12 @@ export default class Enroll extends Component {
                 formdata={this.state.formdata.email}
                 change={element => this.updateForm(element)}
               />
+              {this.state.formError ? (
+                <div className="error_label">
+                  Something is wrong, try again...
+                </div>
+              ) : null}
+              <button onClick={e => this.submitForm(e)}>Enroll</button>
             </div>
           </form>
         </div>

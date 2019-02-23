@@ -1,6 +1,8 @@
 import React from "react";
- 
+
 function MatchedBlock({ match }) {
+  console.log(match);
+
   return (
     <div className="match_block">
       <div className="match_date">
@@ -12,7 +14,7 @@ function MatchedBlock({ match }) {
             <div
               className="icon"
               style={{
-                background: `url(images/team_icons/${match.localThmb}.png)`
+                background: `url('images/team_icons/${match.localThmb}.png')`
               }}
             />
             <div className="team_name">{match.local}</div>
