@@ -2,6 +2,7 @@ import React from "react";
 import { Switch } from "react-router-dom";
 import Dashboard from "./components/admin/Dashboard";
 import AdminMatches from "./components/admin/matches";
+import AddEditMatch from "./components/admin/matches/AddEditMatch";
 import PrivateRoute from "./components/authRoutes/PrivateRoutes";
 import PublicRoute from "./components/authRoutes/PublicRoutes";
 import Home from "./components/home";
@@ -11,6 +12,18 @@ import Layout from "./HOC/Layout";
 const Routes = props => (
   <Layout>
     <Switch>
+      <PrivateRoute
+        exact
+        path="/admin_matches/edit_match/:id"
+        {...props}
+        component={AddEditMatch}
+      />
+      <PrivateRoute
+        exact
+        path="/admin_matches/add_match"
+        {...props}
+        component={AddEditMatch}
+      />
       <PrivateRoute exact path="/dashboard" {...props} component={Dashboard} />
       <PrivateRoute
         exact
