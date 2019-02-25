@@ -84,7 +84,7 @@ export default class AddEditPlayers extends Component {
         validation: {
           required: true
         },
-        valid: true
+        valid: false
       }
     }
   }
@@ -102,12 +102,16 @@ export default class AddEditPlayers extends Component {
   }
   
 
-  updateForm = element => {
+  updateForm = (element, content = '') => {
     const newFormData = { ...this.state.formdata };
     const newElement = { ...newFormData[element.id] };
-    console.log(element);
 
-    newElement.value = element.e.target.value;
+    if(content === '') {
+      newElement.value = element.e.target.value;
+    } else {
+      newElement.value = content
+    }
+
 
     let validData = validate(newElement);
     newElement.valid = validData[0];
@@ -144,8 +148,8 @@ export default class AddEditPlayers extends Component {
 
   }
 
-  storeFilename = () => {
-    
+  storeFilename = (filename) => {
+    this.updateForm({id:'image'}, filename)
   }
 
 
