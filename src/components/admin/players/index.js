@@ -77,3 +77,5 @@ export default class AdminPlayers extends Component {
     );
   }
 }
+
+// index
