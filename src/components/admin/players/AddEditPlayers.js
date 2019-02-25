@@ -4,6 +4,7 @@ import FormField from "../../ui/formFeilds";
 import { validate } from "../../ui/misc";
 // import { firebaseDB, firebasePlayers, firebase } from "../../../firebase";
 import Fileuploader from '../../ui/Fileuploader';
+import { firebasePlayers } from "../../../firebase";
 export default class AddEditPlayers extends Component {
   state={
     playerId:'',
@@ -135,7 +136,17 @@ export default class AddEditPlayers extends Component {
     }
 
     if (formIsValid) {
-      
+      if(this.state.formType === 'Edit player'){
+        
+      } else {
+        firebasePlayers.push(dataToSubmit).then(()=>{
+          this.props.history.push('/admin_players')
+        }).catch(err=>{
+          this.setState({
+            formError: true
+          })
+        })
+      }
       // Submit form
     } else {
       this.setState({
@@ -145,7 +156,13 @@ export default class AddEditPlayers extends Component {
   };
 
   resetImage = () => {
-
+    const newFormdata = {...this.state.formdata}
+    newFormdata['image'].value = '';
+    newFormdata['image'].valid = false;
+    this.setState({
+      defaultImg: '',
+      formdata: newFormdata
+    })
   }
 
   storeFilename = (filename) => {
