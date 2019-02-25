@@ -1,6 +1,8 @@
 import React, { Component } from "react";
+import { firebaseDB, firebaseTeams } from "../../../firebase";
 import AdminLayout from "../../../HOC/AdminLayout";
 import FormField from "../../ui/formFeilds";
+import { firebaseLooper, validate } from "../../ui/misc";
 
 export default class AddEditMatch extends Component {
   state = {
@@ -156,6 +158,76 @@ export default class AddEditMatch extends Component {
       }
     }
   };
+
+  updateFields(match, teamOptions, teams, type, matchId) {
+    const newFormData = { ...this.state.formdata };
+
+    for (let key in newFormData) {
+      if (match) {
+        newFormData[key].value = match[key];
+        newFormData[key].valid = true;
+      }
+      if (key === "local" || key === "away") {
+        newFormData[key].config.options = teamOptions;
+      }
+    }
+    this.setState({
+      matchId,
+      formType: type,
+      formdata: newFormData,
+      teams
+    });
+  }
+
+  componentDidMount = () => {
+    const matchId = this.props.match.params.id;
+    const getTeams = (match, type) => {
+      firebaseTeams.once("value").then(snapshot => {
+        const teams = firebaseLooper(snapshot);
+        const teamOptions = [];
+
+        snapshot.forEach(childSnapshot => {
+          teamOptions.push({
+            key: childSnapshot.val().shortName,
+            value: childSnapshot.val().shortName
+          });
+        });
+        this.updateFields(match, teamOptions, teams, type, matchId);
+      });
+    };
+
+    if (!matchId) {
+      // Add match
+    } else {
+      // Edit Match
+      firebaseDB
+        .ref(`matches/${matchId}`)
+        .once("value")
+        .then(snapshot => {
+          const match = snapshot.val();
+          getTeams(match, "Edit Match");
+        });
+    }
+  };
+
+  updateForm = element => {
+    const newFormData = { ...this.state.formdata };
+    const newElement = { ...newFormData[element.id] };
+
+    newElement.value = element.e.target.value;
+
+    let validData = validate(newElement);
+    newElement.valid = validData[0];
+    newElement.validationMessage = validData[1];
+
+    newFormData[element.id] = newElement;
+
+    this.setState({
+      formError: false,
+      formdata: newFormData
+    });
+  };
+
   render() {
     return (
       <AdminLayout>
