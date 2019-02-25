@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { firebaseDB, firebaseTeams } from "../../../firebase";
+import { firebaseDB, firebaseMatches, firebaseTeams } from "../../../firebase";
 import AdminLayout from "../../../HOC/AdminLayout";
 import FormField from "../../ui/formFeilds";
 import { firebaseLooper, validate } from "../../ui/misc";
@@ -198,6 +198,7 @@ export default class AddEditMatch extends Component {
 
     if (!matchId) {
       // Add match
+      getTeams(false, "Add Match");
     } else {
       // Edit Match
       firebaseDB
@@ -213,6 +214,7 @@ export default class AddEditMatch extends Component {
   updateForm = element => {
     const newFormData = { ...this.state.formdata };
     const newElement = { ...newFormData[element.id] };
+    console.log(element);
 
     newElement.value = element.e.target.value;
 
@@ -226,6 +228,63 @@ export default class AddEditMatch extends Component {
       formError: false,
       formdata: newFormData
     });
+  };
+
+  successForm(message) {
+    this.setState({
+      formSuccess: message
+    });
+
+    setTimeout(() => {
+      this.setState({
+        formSuccess: ""
+      });
+    }, 2000);
+  }
+
+  submitForm = e => {
+    e.preventDefault();
+    let dataToSubmit = {};
+    let formIsValid = true;
+    for (let key in this.state.formdata) {
+      dataToSubmit[key] = this.state.formdata[key].value;
+      formIsValid = this.state.formdata[key].valid && formIsValid;
+    }
+    this.state.teams.forEach(team => {
+      if (team.shortName === dataToSubmit.local) {
+        dataToSubmit["localThmb"] = team.thmb;
+      }
+      if (team.shortName === dataToSubmit.away) {
+        dataToSubmit["awayThmb"] = team.thmb;
+      }
+    });
+
+    if (formIsValid) {
+      if (this.state.formType === "Edit Match") {
+        // Edit Match
+        firebaseDB
+          .ref(`matches/${this.state.matchId}`)
+          .update(dataToSubmit)
+          .then(() => {
+            this.successForm("Updated correctly");
+          })
+          .catch(err => {
+            this.setState({ formError: true });
+          });
+      } else {
+        // Add Match
+        firebaseMatches
+          .push(dataToSubmit)
+          .then(() => {
+            this.props.history.push("/admin_matches");
+          })
+          .catch(err => this.setState({ formError: true }));
+      }
+    } else {
+      this.setState({
+        formError: true
+      });
+    }
   };
 
   render() {
