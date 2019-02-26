@@ -9,6 +9,7 @@ import PrivateRoute from "./components/authRoutes/PrivateRoutes";
 import PublicRoute from "./components/authRoutes/PublicRoutes";
 import Home from "./components/home";
 import SignIn from "./components/signin";
+import TheTeam from "./components/theTeam";
 import Layout from "./HOC/Layout";
 
 const Routes = props => (
@@ -63,6 +64,13 @@ const Routes = props => (
         restricted={true}
         {...props}
         component={SignIn}
+      />
+      <PublicRoute
+        exact
+        path="/the_team"
+        restricted={false}
+        {...props}
+        component={TheTeam}
       />
       <PublicRoute
         exact
