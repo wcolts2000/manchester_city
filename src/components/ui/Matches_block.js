@@ -1,4 +1,5 @@
 import React from "react";
+const imgPath = "../../images/";
 
 function MatchedBlock({ match }) {
   console.log(match);
@@ -14,7 +15,7 @@ function MatchedBlock({ match }) {
             <div
               className="icon"
               style={{
-                background: `url('images/team_icons/${match.localThmb}.png')`
+                background: `url(${imgPath}team_icons/${match.localThmb}.png)`
               }}
             />
             <div className="team_name">{match.local}</div>
@@ -26,7 +27,7 @@ function MatchedBlock({ match }) {
             <div
               className="icon"
               style={{
-                background: `url(/images/team_icons/${
+                background: `url(${imgPath}team_icons/${
                   match.awayThmb
                 }.png) no-repeat`
               }}

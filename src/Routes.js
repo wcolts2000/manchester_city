@@ -11,6 +11,7 @@ import Home from "./components/home";
 import SignIn from "./components/signin";
 import TheMatches from "./components/theMatches";
 import TheTeam from "./components/theTeam";
+import NotFound from "./components/ui/not_found";
 import Layout from "./HOC/Layout";
 
 const Routes = props => (
@@ -87,6 +88,7 @@ const Routes = props => (
         {...props}
         component={Home}
       />
+      <PublicRoute restricted={false} {...props} component={NotFound} />
     </Switch>
   </Layout>
 );
