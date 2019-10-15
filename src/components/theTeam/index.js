@@ -14,7 +14,9 @@ export default class TheTeam extends Component {
 
   componentDidMount = () => {
     firebasePlayers.once("value").then(snapshot => {
+      console.log("SNAPSHOT: ", snapshot)
       const players = firebaseLooper(snapshot);
+      console.log("PLAYERS: ", players)
       let promises = [];
       for (let key in players) {
         promises.push(
@@ -25,9 +27,10 @@ export default class TheTeam extends Component {
               .child(players[key].image)
               .getDownloadURL()
               .then(url => {
+                console.log("URL: ", url)
                 players[key].url = url;
                 resolve();
-              });
+              }).catch(err => console.log("ERR: ", err))
           })
         );
       }
