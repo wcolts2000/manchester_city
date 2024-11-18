@@ -5,7 +5,7 @@
   "dependencies": {
     "@material-ui/core": "4.12.4",
     "d3-ease": "1.0.3",
-    "firebase": "^9.14.0",
+    "firebase": "^10.9.0",
     "react": "^16.8.2",
     "react-dom": "^16.8.2",
     "react-firebase-file-uploader": "2.4.1",
